@@ -11,3 +11,4 @@
     2. fetch() 可以不会接受跨域 cookies；你也可以不能使用 fetch() 建立起跨域会话。其他网站的 Set-Cookie 头部字段将会被无视。
     3. fetch 不会发送 cookies。除非你使用了credentials 的初始化选项。（自 2017 年 8 月 25 日以后，默认的 credentials 政策变更为 same-origin。Firefox 也在 61.0b13 版本中进行了修改
 6. src下的 .env .env.development文件配置不同环境的接口地址；
+7. "json-server": "json-server __json_server_mock__/db.json --watch --middlewares __json_server_mock__/middleware.js"
