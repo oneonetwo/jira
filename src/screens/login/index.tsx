@@ -1,27 +1,17 @@
-import { useAuth } from "context/auth-context";
-import { FormEvent, useEffect } from "react"
+import { Card } from "antd";
+import { useState } from "react"
+import { LoginScreen } from "./login";
+import { RegisterScreen } from "./register";
 
-const apiUrl = process.env.REACT_APP_API_URL;
-export const LoginScreen = () => {
-    const { login, user } = useAuth();
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const username = (event.currentTarget.elements[0] as HTMLInputElement).value;
-        const password = (event.currentTarget.elements[1] as HTMLInputElement).value;
-        login({ username, password });
-    }
+export const UnauthenticatedApp = () => {
+    const [isRegister, setIsRegister] = useState(false);
 
-
-    return <form onSubmit={handleSubmit}>
-        登陆成功，用户名： {user?.name}
-        <div>
-            <label htmlFor="username">用户名：</label>
-            <input type="text" id={"username"} />
-        </div>
-        <div>
-            <label htmlFor="password">密码：</label>
-            <input type="password" id={"password"} />
-        </div>
-        <button type={"submit"}>登录</button>
-    </form>
+    return <div style={{ display: "flex", justifyContent: "center" }}>
+        <Card>
+            {isRegister ? <RegisterScreen /> : <LoginScreen />}
+            <button onClick={() => setIsRegister(!isRegister)}>
+                切换到{isRegister ? "登录" : "注册"}
+            </button>
+        </Card>
+    </div>
 }
