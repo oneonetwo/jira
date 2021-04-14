@@ -3,8 +3,8 @@ import { FormEvent, useEffect } from "react"
 import { Button, Form, Input } from 'antd';
 
 const apiUrl = process.env.REACT_APP_API_URL;
-export const RegisterScreen = () => {
-    const { register, user } = useAuth();
+export const LoginScreen = () => {
+    const { login, user } = useAuth();
     // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     //     event.preventDefault();
     //     const username = (event.currentTarget.elements[0] as HTMLInputElement).value;
@@ -12,10 +12,11 @@ export const RegisterScreen = () => {
     //     login({ username, password });
     // }
     const handleSubmit = (values: {username:string, password: string})=>{
-        register(values);
+        login(values);
     }
 
     return <Form onFinish={handleSubmit}>
+        请登录
         <Form.Item name={'username'} rules={[{required:true, message:'请输入用户名'}]}>
             <Input placeholder={'用户名'}   type="text" id={"username"} />
         </Form.Item>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export const isFalsy = (value: unknown)=>(value === 0? false: !value);
+export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 export const isVoid = (value: unknown) => value === undefined || value === null || value === "";
 export const cleanObject = (object: object) => {
     const result = { ...object };
@@ -17,15 +17,20 @@ export const cleanObject = (object: object) => {
 export const useMount = (callback: () => void) => {
     useEffect(() => {
         callback();
-    }, [])
-}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+};
 //防抖
+// 后面用泛型来规范类型
 export const useDebounce = <V>(value: V, delay?: number) => {
-    const [debounceValue, setDebounceValue] = useState(value);
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
     useEffect(() => {
-        const timeout = setTimeout(() => { setDebounceValue(value) }, delay);
-        //effect会在执行当前effect之前对上一个effect进行清除；
+        // 每次在value变化以后，设置一个定时器
+        const timeout = setTimeout(() => setDebouncedValue(value), delay);
+        // 每次在上一个useEffect处理完以后再运行
         return () => clearTimeout(timeout);
-    }, [value, delay])
-    return debounceValue;
-}
+    }, [value, delay]);
+
+    return debouncedValue;
+};

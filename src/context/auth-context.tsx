@@ -18,15 +18,17 @@ interface AuthForm {
 }
 
 
-const bootstrapUser = async()=>{
+
+const bootstrapUser = async () => {
     let user = null;
     const token = auth.getToken();
-    if(token){
-        let data = await http('me', {token});
-        user = data.user;
+    if (token) {
+      const data = await http("me", { token });
+      user = data.user;
     }
     return user;
-}
+  };
+  
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const login = (form: AuthForm) => auth.login(form).then(setUser);

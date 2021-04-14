@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { SearchPanel } from './search-panel';
 import { List } from './list';
-
+import styled from "@emotion/styled";
 import { cleanObject, useDebounce, useMount } from '../../utils'
 import { useHttp } from 'utils/https';
 
@@ -17,27 +17,31 @@ export const ProjectListScreen = () => {
     const client = useHttp();
 
     //防抖
-    const debounceParam = useDebounce(param, 2000);
-    client('projects', {data: cleanObject(debounceParam)}).then(setList);
-    // useEffect(() => {
-    //     fetch(`${apiUrl}/projects?${new URLSearchParams(cleanObject(debounceParam))}`).then(async res => {
-    //         if (res.ok) {
-    //             setList(await res.json());
-    //         }
-    //     })
-    // }, [debounceParam])
+    const debounceParam = useDebounce(param, 500);
+    useEffect(() => {
+        client('projects', { data: cleanObject(debounceParam) }).then(setList);
+        // fetch(`${apiUrl}/projects?${new URLSearchParams(cleanObject(debounceParam))}`).then(async res => {
+        //     if (res.ok) {
+        //         setList(await res.json());
+        //     }
+        // })
+    }, [debounceParam])
 
     useMount(() => {
         client('users').then(setUsers)
-        fetch(`${apiUrl}/users`).then(async res => {
-            if (res.ok) {
-                setUsers(await res.json());
-            }
-        })
+        // fetch(`${apiUrl}/users`).then(async res => {
+        //     if (res.ok) {
+        //         setUsers(await res.json());
+        //     }
+        // })
     })
 
-    return <div>
+    return <Container>
         <SearchPanel param={param} setParam={setParam} users={users} />
         <List list={list} users={users} />
-    </div>
+    </Container>
 }
+
+const Container = styled.div`
+  padding: 3.2rem;
+`;
