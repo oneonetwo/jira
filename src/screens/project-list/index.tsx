@@ -2,12 +2,9 @@ import { useState, useEffect } from 'react';
 import { SearchPanel } from './search-panel';
 import { List } from './list';
 import styled from "@emotion/styled";
-import { cleanObject, useDebounce, useMount } from '../../utils'
+import { useDebounce, useMount } from '../../utils'
 import { useHttp } from 'utils/https';
-import { Typography } from 'antd';
-import { useAsync } from 'utils/useAsync';
-
-import { Project } from './list';
+import { useProject } from 'utils/useProject';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreen = () => {
@@ -18,19 +15,15 @@ export const ProjectListScreen = () => {
     const [users, setUsers] = useState([]);
 
     const client = useHttp();
-    const { run, isLoading, isError, data: list } = useAsync<Project[]>();
+    // const { run, isLoading, isError, data: list } = useAsync<Project[]>();
 
     //防抖
-    const debounceParam = useDebounce(param, 500);
-    useEffect(() => {
-        run(client('projects', { data: cleanObject(debounceParam) }))
-
-        // fetch(`${apiUrl}/projects?${new URLSearchParams(cleanObject(debounceParam))}`).then(async res => {
-        //     if (res.ok) {
-        //         setList(await res.json());
-        //     }
-        // })
-    }, [debounceParam])
+    const debounceParam = useDebounce(param, 200);
+    //获取project列表
+    const { isLoading, error, data: list } = useProject(debounceParam)
+    // useEffect(() => {
+    //     run(client('projects', { data: cleanObject(debounceParam) }))
+    // }, [debounceParam])
 
     useMount(() => {
         client('users').then(setUsers)
