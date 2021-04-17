@@ -6,15 +6,17 @@ import { TsReactTest } from 'try-use-array';
 import { UnauthenticatedApp } from './unauthenticated-app';
 import { AuthenticatedApp } from './authenticated-app';
 import { useAuth } from 'context/auth-context';
-
+import { ErrorBoundary } from 'components/error-boundary';
+import { FullPageErrorFallback } from 'components/lib';
 function App() {
   const { user } = useAuth();
   return (
     <div className="App">
       {/* <ProjectListScreen /> */}
       {/* <TsReactTest /> */}
-      
-      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      <ErrorBoundary fallbackRender={FullPageErrorFallback}>
+        {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      </ErrorBoundary>
     </div>
   );
 }
