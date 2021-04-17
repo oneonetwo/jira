@@ -17,8 +17,9 @@ export const login = (data: { username: string, password: string }) => {
         },
         body: JSON.stringify(data)
     }).then(async (response: Response) => {
+        let data = await response.json();
         if (response.ok) {
-            return handleUserResponse(await response.json());
+            return handleUserResponse(data);
         } else {
             return Promise.reject(data);
         }
@@ -32,8 +33,9 @@ export const register = (data: { username: string, password: string }) => {
         },
         body: JSON.stringify(data)
     }).then(async (response: Response) => {
+        let data = await response.json();
         if (response.ok) {
-            return handleUserResponse(await response.json());
+            return handleUserResponse(data);
         } else {
             return Promise.reject(data);
         }
