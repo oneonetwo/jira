@@ -12,3 +12,8 @@
     3. fetch 不会发送 cookies。除非你使用了credentials 的初始化选项。（自 2017 年 8 月 25 日以后，默认的 credentials 政策变更为 same-origin。Firefox 也在 61.0b13 版本中进行了修改
 6. src下的 .env .env.development文件配置不同环境的接口地址；
 7. "json-server": "json-server __json_server_mock__/db.json --watch --middlewares __json_server_mock__/middleware.js"
+8. why-did-you-render 告诉你你的页面为什么一直重新渲染
+    1. 先安装
+    2. 在src下建立wdyr.js文件，在app.js中引用；
+9. 基本类型可以放到依赖里面，组件状态可以放到依赖里面；非组件状态的对象一定不能放在依赖里面；
+10. useState 直接传入函数的意义是惰性初始化，所以用useState保存函数不能直接传入函数
