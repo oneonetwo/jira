@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 export const isVoid = (value: unknown) => value === undefined || value === null || value === "";
@@ -35,16 +35,34 @@ export const useDebounce = <V>(value: V, delay?: number) => {
 };
 
 //切换标题
-export const useDocumentTitle = (title: string)=>{
-    const oldTitle = document.title;
+// export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true)=>{
+//     const oldTitle = document.title;
+//     useEffect(()=>{
+//         document.title = title;
+//     },[ title ])
+
+//     useEffect(()=>{
+//         return ()=>{
+//             if(!keepOnUnmount){
+//                 document.title = oldTitle;
+//             }
+//         }
+//     }, [])
+
+// }
+export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true)=>{
+    const oldTitle = useRef(document.title).current;
+    //useRef在组件的整个生命周期都不会变化
     useEffect(()=>{
         document.title = title;
     },[ title ])
 
     useEffect(()=>{
         return ()=>{
-            document.title = oldTitle;
+            if(!keepOnUnmount){
+                document.title = oldTitle;
+            }
         }
-    }, [])
+    }, [keepOnUnmount, oldTitle])
 
 }

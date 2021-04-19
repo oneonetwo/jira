@@ -13,7 +13,7 @@ export const ProjectListScreen = () => {
         name: '',
         personId: ''
     })
-    useDocumentTitle('项目列表');
+    useDocumentTitle('项目列表', false);
     //const client = useHttp();
     // const { run, isLoading, isError, data: list } = useAsync<Project[]>();
 
