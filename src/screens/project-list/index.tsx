@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { SearchPanel } from './search-panel';
 import { List } from './list';
 import styled from "@emotion/styled";
-import { useDebounce, useMount } from '../../utils'
+import { useDebounce, useDocumentTitle, useMount } from '../../utils'
 import { useHttp } from 'utils/https';
 import { useProject } from 'utils/useProject';
 import { useUser } from 'utils/useUsers';
@@ -13,7 +13,7 @@ export const ProjectListScreen = () => {
         name: '',
         personId: ''
     })
-
+    useDocumentTitle('项目列表');
     //const client = useHttp();
     // const { run, isLoading, isError, data: list } = useAsync<Project[]>();
 

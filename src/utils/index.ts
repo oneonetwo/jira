@@ -33,3 +33,18 @@ export const useDebounce = <V>(value: V, delay?: number) => {
 
     return debouncedValue;
 };
+
+//切换标题
+export const useDocumentTitle = (title: string)=>{
+    const oldTitle = document.title;
+    useEffect(()=>{
+        document.title = title;
+    },[ title ])
+
+    useEffect(()=>{
+        return ()=>{
+            document.title = oldTitle;
+        }
+    }, [])
+
+}
