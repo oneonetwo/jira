@@ -10,11 +10,9 @@ import { UseUrlQueryParam } from 'utils/url';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreen = () => {
-  const [, setParam] = useState({
-    name: '',
-    personId: ''
-  })
-  const [param] = UseUrlQueryParam(['name', 'personId']);
+
+  //要是想把传入的参数作为依赖项，可以 作为状态传入 keys 如， const [keys, setkeys] = useState(['name', 'personId'])
+  const [param, setParam] = UseUrlQueryParam(['name', 'personId']);
   useDocumentTitle('项目列表', false);
   //const client = useHttp();
   // const { run, isLoading, isError, data: list } = useAsync<Project[]>();
