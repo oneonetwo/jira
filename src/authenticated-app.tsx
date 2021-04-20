@@ -1,12 +1,12 @@
-import React from "react";
-import { ProjectListScreen } from "screens/project-list";
+import React, { useEffect } from "react";
 import { useAuth } from "context/auth-context";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import styled from "@emotion/styled";
 import { Row } from "components/lib";
-import { Dropdown, Menu } from "antd";
+import { Dropdown, Menu, Button } from "antd";
 import { Routes, Route, Navigate } from 'react-router';
-import { BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ProjectListScreen } from "screens/project-list";
 import { ProjectScreen } from "screens/project";
 
 /**
@@ -23,11 +23,14 @@ import { ProjectScreen } from "screens/project";
 
 export const AuthenticatedApp = () => {
     const { logout, user } = useAuth();
+    const resetRoute = () => window.location.href = window.location.origin;
     return (
         <Container>
             <Header between={true}>
                 <HeaderLeft gap={true}>
-                    <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
+                    <Button type={'link'} onClick={resetRoute}>
+                        <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
+                    </Button>
                     <h2>项目</h2>
                     <h2>用户</h2>
                 </HeaderLeft>
@@ -50,7 +53,8 @@ export const AuthenticatedApp = () => {
                 <Router>
                     <Routes>
                         <Route path={'/projects'} element={<ProjectListScreen />} />
-                        <Route path={'/projects/:projectId'} element={<ProjectScreen />} />
+                        <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
+                        <Navigate to={'/projects'} />
                     </Routes>
                 </Router>
             </Main>
