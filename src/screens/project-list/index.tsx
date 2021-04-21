@@ -21,9 +21,6 @@ export const ProjectListScreen = () => {
   const debounceParam = useDebounce(param, 200);
   //获取project列表
   const { isLoading, error, data: list } = useProject(debounceParam);
-  // useEffect(() => {
-  //     run(client('projects', { data: cleanObject(debounceParam) }))
-  // }, [debounceParam])
   //获取User列表
   const { data: users } = useUser();
   //useMount(() => {
@@ -41,7 +38,8 @@ export const ProjectListScreen = () => {
     <List dataSource={list || []} users={users || []} loading={isLoading} />
   </Container>
 }
-ProjectListScreen.whyDidYouRender = true;
+//重复渲染监测机制
+ProjectListScreen.whyDidYouRender = false;
 const Container = styled.div`
   padding: 3.2rem;
 `;
