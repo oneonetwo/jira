@@ -8,8 +8,10 @@ import { cleanObject } from "utils";
 export const useProject = <D>(param?: D) => {
     const client = useHttp();
     const { run, ...result } = useAsync<Project[]>();
+    //提取client
+    const fetchProject = () => client('projects', { data: cleanObject(param || {}) });
     useEffect(() => {
-        run(client('projects', { data: cleanObject(param || {}) }))
+        run(fetchProject(), { retry: fetchProject })
 
         // fetch(`${apiUrl}/projects?${new URLSearchParams(cleanObject(debounceParam))}`).then(async res => {
         //     if (res.ok) {

@@ -15,6 +15,9 @@ const defaultConfig = {
 }
 export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defaultConfig) => {
     const config = { ...defaultConfig, ...initialConfig };
+    //用useState 惰性初始化状态, 初始值为函数
+    const [retry, setRetry] = useState(() => () => { })
+
     const [state, setState] = useState<State<D>>(
         { ...defaultInitialState, ...initialState }
     );
@@ -32,9 +35,16 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
             error
         })
     }
+
     //用来承载异步请求
-    const run = (promise: Promise<D>) => {
+    const run = (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
         if (promise && typeof promise.then === 'function') {
+            //用retry保存接口状态，来做重新渲染数据
+            setRetry(() => () => {
+                if (runConfig?.retry) {
+                    run(runConfig.retry(), runConfig);
+                }
+            })
             setState({ ...state, stat: 'loading' });
             return promise.then(data => {
                 setData(data);
@@ -58,6 +68,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
         setData,
         setError,
         run,
+        retry,
         ...state
     }
 }
