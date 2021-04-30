@@ -1,4 +1,5 @@
 import { useReducer, useState } from "react"
+import { useMountedRef } from "utils";
 
 interface State<D> {
     error: Error | null;
@@ -17,7 +18,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     const config = { ...defaultConfig, ...initialConfig };
     //用useState 惰性初始化状态, 初始值为函数
     const [retry, setRetry] = useState(() => () => { })
-
+    const mountedRef = useMountedRef();
     const [state, setState] = useState<State<D>>(
         { ...defaultInitialState, ...initialState }
     );
@@ -47,7 +48,9 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
             })
             setState({ ...state, stat: 'loading' });
             return promise.then(data => {
-                setData(data);
+                if(mountedRef.current){
+                    setData(data);
+                }
                 return data;
             }).catch(error => {
                 setError(error);
