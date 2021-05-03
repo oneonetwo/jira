@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useHttp } from 'utils/https';
 import { useAsync } from 'utils/useAsync';
 
@@ -9,7 +9,7 @@ export const useProject = <D>(param?: D) => {
     const client = useHttp();
     const { run, ...result } = useAsync<Project[]>();
     //提取client
-    const fetchProject = () => client('projects', { data: cleanObject(param || {}) });
+    const fetchProject = useCallback(() => client('projects', { data: cleanObject(param || {}) }), [param, client]);
     useEffect(() => {
         run(fetchProject(), { retry: fetchProject })
 
