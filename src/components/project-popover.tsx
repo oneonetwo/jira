@@ -3,7 +3,7 @@ import { Popover, Typography, List, Divider, Button } from "antd"
 import React from "react";
 import { useProject } from "utils/useProject"
 
-export const ProjectPopover = (props: {setProjectModalOpen: (isOpen: boolean)=>void}) => {
+export const ProjectPopover = (props: { projectButton: JSX.Element }) => {
     const { data: projects, isLoading } = useProject();
     const pinnedProject = projects?.filter(item => item.pin);
     const Content = <ContentContainer>
@@ -15,8 +15,8 @@ export const ProjectPopover = (props: {setProjectModalOpen: (isOpen: boolean)=>v
                 </List.Item>)
             }
         </List>
-        <Divider/>
-        <Button type={'link'} onClick={()=>props.setProjectModalOpen(true)}>创建项目</Button>
+        <Divider />
+        {props.projectButton}
     </ContentContainer>
 
     return <Popover placement={'bottom'} content={Content}>

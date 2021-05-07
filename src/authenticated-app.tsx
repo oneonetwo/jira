@@ -33,7 +33,9 @@ export const AuthenticatedApp = () => {
                     <Button type={'link'} onClick={resetRoute}>
                         <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
                     </Button>
-                    <ProjectPopover setProjectModalOpen={ setProjectModalOpen}></ProjectPopover>
+                    <ProjectPopover projectButton={
+                        <Button type={'link'} onClick={()=>setProjectModalOpen(true)}>创建项目</Button>
+                    }></ProjectPopover>
                     <h2>项目</h2>
                     <h2>用户</h2>
                 </HeaderLeft>
@@ -45,7 +47,9 @@ export const AuthenticatedApp = () => {
                 {/* <ProjectListScreen /> */}
                 <Router>
                     <Routes>
-                        <Route path={'/projects'} element={<ProjectListScreen setProjectModalOpen={setProjectModalOpen}/>} />
+                        <Route path={'/projects'} element={<ProjectListScreen projectButton={
+                        <Button type={'link'} onClick={()=>setProjectModalOpen(true)}>创建项目</Button>
+                    }/>} />
                         <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
                         <Navigate to={'/projects'} />
                     </Routes>
