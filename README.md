@@ -19,6 +19,8 @@
 10. useState 直接传入函数的意义是惰性初始化，所以用useState保存函数不能直接传入函数
     1. useRef保存的值，并不是组件的转态，改变它的值并不会触发组件的重新渲染；
 11. 函数柯力化和函数省参的结合，在useEditProject()中
-#### 10章
-1. 组件组合（component composition）有时候是一个比context更好的解决方案；
+#### 第10章
+1. 用useMountedRef自定义hook来确定组件的加载状态，避免组件卸载之后请求返回发生的错误；进而阻止在已卸载组件上赋值；
+2. 在useCallback中用到了setState,并且把state加到依赖里面，会造成无限渲染的问题， 那么可以用setState的函数用法，然后去掉state作为依赖项
+3. ##组件组合（component composition）有时候是一个比context更好的解决方案##；
     - 控制反转：就是把传统模式中需要自己通过new实例化构造函数，或者通过工厂模式实例化的任务交给容器；
