@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "context/auth-context";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import styled from "@emotion/styled";
@@ -8,6 +8,8 @@ import { Routes, Route, Navigate } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ProjectListScreen } from "screens/project-list";
 import { ProjectScreen } from "screens/project";
+import { ProjectModal } from "screens/project-list/project-modal";
+import { ProjectPopover } from "components/project-popover";
 
 /**
  * grid 和 flex 各自的应用场景
@@ -22,7 +24,7 @@ import { ProjectScreen } from "screens/project";
  */
 
 export const AuthenticatedApp = () => {
-    const { logout, user } = useAuth();
+    const [projectModalOpen, setProjectModalOpen] = useState(false);
     const resetRoute = () => window.location.href = window.location.origin;
     return (
         <Container>
@@ -31,36 +33,44 @@ export const AuthenticatedApp = () => {
                     <Button type={'link'} onClick={resetRoute}>
                         <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
                     </Button>
+                    <ProjectPopover setProjectModalOpen={ setProjectModalOpen}></ProjectPopover>
                     <h2>项目</h2>
                     <h2>用户</h2>
                 </HeaderLeft>
                 <HeaderRight>
-                    <Dropdown
-                        overlay={
-                            <Menu>
-                                <Menu.Item key={"logout"}>
-                                    <a onClick={logout}>登出</a>
-                                </Menu.Item>
-                            </Menu>
-                        }
-                    >
-                        <a onClick={(e) => e.preventDefault()}>Hi, {user?.name}</a>
-                    </Dropdown>
+                    <User />
                 </HeaderRight>
             </Header>
             <Main>
                 {/* <ProjectListScreen /> */}
                 <Router>
                     <Routes>
-                        <Route path={'/projects'} element={<ProjectListScreen />} />
+                        <Route path={'/projects'} element={<ProjectListScreen setProjectModalOpen={setProjectModalOpen}/>} />
                         <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
                         <Navigate to={'/projects'} />
                     </Routes>
                 </Router>
             </Main>
+            <ProjectModal projectModalOpen={projectModalOpen} onClose={()=>setProjectModalOpen(false)}></ProjectModal>
         </Container>
     );
 };
+
+const User = ()=>{
+    const { logout, user } = useAuth();
+    return  <Dropdown
+        overlay={
+            <Menu>
+                <Menu.Item key={"logout"}>
+                    <a onClick={logout}>登出</a>
+                </Menu.Item>
+            </Menu>
+        }
+    >
+        <a onClick={(e) => e.preventDefault()}>Hi, {user?.name}</a>
+    </Dropdown>
+}
+
 
 const Container = styled.div`
   display: grid;
