@@ -14,34 +14,28 @@ const defaultInitialState: State<null> = {
 const defaultConfig = {
     throwOnError: false
 }
-const useSafeDispatch = <T>(dispatch:(...args: T[])=>void)=>{
-    const mountedRef = useMountedRef();
-    return (...args: T[])=>(mountedRef.current ? dispatch(...args): void 0);
-}
 export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defaultConfig) => {
     const config = { ...defaultConfig, ...initialConfig };
-    // const mountedRef = useMountedRef();
-    const [state, dispatch] = useReducer((state: State<D>, action: Partial<State<D>>)=>({...state, ...action}), {
-        ...defaultInitialState, ...initialState
-    }) 
-    const safeDispatch = useSafeDispatch(dispatch);
     //用useState 惰性初始化状态, 初始值为函数
-    const [retry, setRetry] = useState(() => () => { });
-
+    const [retry, setRetry] = useState(() => () => { })
+    const mountedRef = useMountedRef();
+    const [state, setState] = useState<State<D>>(
+        { ...defaultInitialState, ...initialState }
+    );
     const setData = useCallback((data: D) => {
-        safeDispatch({
+        setState({
             data,
             stat: 'success',
             error: null
         })
-    }, [safeDispatch])
+    }, [])
     const setError = useCallback((error: Error) => {
-        safeDispatch({
+        setState({
             stat: 'error',
             data: null,
             error
         })
-    }, [safeDispatch])
+    }, [])
 
     //用来承载异步请求
     const run = useCallback((
@@ -55,9 +49,11 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
                         run(runConfig.retry(), runConfig);
                     }
                 })
-                safeDispatch({stat: 'loading'})
+                setState(prevState => ({ ...prevState, stat: 'loading' }));
                 return promise.then(data => {
-                    setData(data);
+                    if(mountedRef.current){
+                        setData(data);
+                    }
                     return data;
                 }).catch(error => {
                     setError(error);
@@ -69,7 +65,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
             } else {
                 throw new Error('请传入promise');
             }
-        },[config.throwOnError, setData, state, setError, safeDispatch])
+        },[config.throwOnError,  mountedRef, setData, state, setError])
     return {
         isLoading: state.stat === 'loading',
         isIdel: state.stat === 'idel',
